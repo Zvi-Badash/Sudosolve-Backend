@@ -59,12 +59,3 @@ class Sudoku(CSP):
             '\n'.join(reduce(
                 abut, map(show_box, brow))) for brow in self.bgrid))
         print()
-
-
-easy1 = '000003600200400508000050370080000000040020000006039040010900800502000090000006002'
-e = Sudoku(easy1)
-
-e.display(e.infer_assignment())
-e.AC3()
-e.display(e.infer_assignment())
-print(e.nassigns)

@@ -1,5 +1,5 @@
 from typing import *
-from utils import count
+from utils import count, argmin_random_tie
 
 Variable = Union[str, int]
 Domain = Dict[Variable, List]
@@ -15,12 +15,14 @@ class CSP:
         self.domains = domains
         self.neighbors = neighbors
         self.constraints = constraints
+        self.nassigns = 0
 
     # ---------------- BASIC CSP ----------------
 
     def assign(self, var: Variable, val: Any, assignment):
         """Add {var: val} to assignment; Discard the old value if any."""
         assignment[var] = val
+        self.nassigns += 1
 
     def unassign(self, var, assignment):
         """Remove {var: val} from assignment.
@@ -54,26 +56,70 @@ class CSP:
         self.domains[var] = [value]
         return removals
 
+    def choices(self, var):
+        """Return all values for var that aren't currently ruled out."""
+        return self.domains[var]
+
     # ---------------- INFERENCE ----------------
 
-    def revise(self, Xi: Variable, Xj: Variable) -> bool:
+    def revise(self, Xi: Variable, Xj: Variable, removals: List) -> bool:
         revised = False
         for x in self.domains[Xi][:]:
             sat_vars = [y for y in self.domains[Xj] if self.constraints(Xi, x, Xj, y)]
             if not sat_vars:
-                print('[+] PRUNED ')
                 self.domains[Xi].remove(x)
+                removals.append((Xi, x))
                 revised = True
         return revised
 
-    def AC3(self, queue=None):
+    def AC3(self, removals, queue=None):
         q: Set[Tuple[Variable, Variable]] = {(Xi, Xk) for Xi in self.variables for Xk in
                                              self.neighbors[Xi]} if queue is None else queue
         while len(q) != 0:
             (Xi, Xj) = q.pop()
-            if self.revise(Xi, Xj):
+            if self.revise(Xi, Xj, removals):
                 if not self.domains[Xi]:
                     return False
                 for Xk in self.neighbors[Xi]:
                     if Xk != Xj:
                         q.add((Xk, Xi))
+        return True
+
+    # ------------------- ORDERING -------------------
+
+    def num_legal_values(self, var, assignment):
+        if self.domains:
+            return len(self.domains[var])
+        else:
+            return count(self.nconflicts(var, val, assignment) == 0 for val in self.domains[var])
+
+    def lcv(self, var, assignment) -> Any:
+        """Least-constraining-values heuristic."""
+        return sorted(self.choices(var), key=lambda val: self.nconflicts(var, val, assignment))
+
+    def mrv(self, assignment) -> Variable:
+        """Minimum-remaining-values heuristic."""
+        return argmin_random_tie([v for v in self.variables if v not in assignment],
+                                 key=lambda var: self.num_legal_values(var, assignment))
+
+    # ------------------- SEARCH -------------------
+    def backtracking_search(self):
+        """[Figure 6.5]"""
+
+        def backtrack(assignment):
+            if len(assignment) == len(self.variables):
+                return assignment
+            var = self.mrv(assignment)
+            for value in self.lcv(var, assignment):
+                if 0 == self.nconflicts(var, value, assignment):
+                    self.assign(var, value, assignment)
+                    removals = self.suppose(var, value)
+                    if self.AC3(queue={(X, var) for X in self.neighbors[var]}, removals=removals):
+                        result = backtrack(assignment)
+                        if result is not None:
+                            return result
+                    self.restore(removals)
+            self.unassign(var, assignment)
+            return None
+
+        return backtrack({})
