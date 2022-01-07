@@ -1,11 +1,9 @@
-import datetime
 from time import perf_counter
 from datetime import datetime
 from my_sudoku_solver.Sudoku import Sudoku
 
 print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 with open('all-sudokus.txt', 'r') as f:
-    curr_line = f.readline()
     times = []
     for curr_line in f:
         start = perf_counter()
