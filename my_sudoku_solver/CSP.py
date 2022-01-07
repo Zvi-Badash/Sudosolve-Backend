@@ -8,7 +8,7 @@ Assignment = Dict[Variable, Any]
 
 
 class CSP:
-    def __init__(self, variables: List[Variable], domains: Union[None, Domain],
+    def __init__(self, variables: Union[None, List[Variable]], domains: Union[None, Domain],
                  neighbors: Union[None, Neighbors], constraints: Callable):
         variables = variables or list(domains.keys())
         self.variables = variables
