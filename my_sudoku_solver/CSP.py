@@ -1,5 +1,5 @@
 from typing import *
-from utils import count, argmin_random_tie
+from .utils import count, argmin_random_tie
 
 Variable = Union[str, int]
 Domain = Dict[Variable, List]

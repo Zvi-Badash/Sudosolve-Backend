@@ -1,4 +1,7 @@
 import argparse
+
+import cv2
+
 from Classifier import Classifier
 
 ap = argparse.ArgumentParser()
@@ -8,4 +11,4 @@ args = vars(ap.parse_args())
 
 classifier = Classifier(args['model'])
 
-print(classifier.classify(args['image']))
+print(classifier.classify(cv2.imread(args['image'])))

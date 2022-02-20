@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SudoSolve API help</title>
+    <style>
+    code {
+      font-family: Consolas,"courier new",serif;
+      color: crimson;
+      background-color: #f1f1f1;
+      padding: 1px;
+      font-size: 85%;
+    }
+</style>
+</head>
+
+<body>
+<h1>Welcome to the SudoSolve API!</h1>
+<h3>Usage:</h3>
+<pre>
+- Send a POST request to /solve with JSON containing the key
+    'board' with the value being the actual board position.
+    for example, use:
+    <code>>>> curl -X POST -d '{"board": "080000000000050900701002060020000080030004000408900600604007010300000000000200007"}' http://127.0.0.1:5000/solve -H "Content-Type: application/json" -H "Auth: AUTH_KEY"</code>
+    to request the solution to a given board.
+</pre>
+
+<pre>
+- Send a POST request to /identify with JSON containing the key
+    'image' with the sub-keys 'mime' and 'data'. the value of 'data' must be the actual base 64 representation of the image taken.
+    for example, use:
+    <code>>>> curl -X POST -d @image.json http://127.0.0.1:5000/identify -H "Content-Type: application/json" -H "Auth: AUTH_KEY"</code>
+    where image.json is of the form:
+    <code>{
+        "image": {
+            "mime": "image/jpeg",
+            "data": "..."
+        }
+    }</code>
+</pre>
+
+<pre>
+- Send a GET request to the root URI to view this page.
+</pre>
+</body>
+
+</html>

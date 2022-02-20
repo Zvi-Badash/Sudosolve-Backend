@@ -2,13 +2,8 @@ import itertools
 import re
 from functools import reduce
 
-from CSP import CSP
-from utils import flatten
-
-
-def all_diff_binary(A, a, B, b):
-    return a != b
-
+from .CSP import CSP
+from .utils import flatten
 
 _R3 = list(range(3))
 _CELL = itertools.count().__next__
@@ -24,31 +19,43 @@ for unit in map(set, _BOXES + _ROWS + _COLS):
 
 
 class Sudoku(CSP):
-    R3 = _R3
-    Cell = _CELL
-    bgrid = _BGRID
-    boxes = _BOXES
     rows = _ROWS
-    cols = _COLS
     neighbors = _NEIGHBORS
+    bgrid = _BGRID
 
     def __init__(self, grid):
         """Build a Sudoku problem from a string representing the grid:
         the digits 1-9 denote a filled cell, '.' or '0' an empty one;
         other characters are ignored."""
         squares = iter(re.findall(r'\d|\.', grid))
-        domains = {var: [ch] if ch in '123456789' else '1,2,3,4,5,6,7,8,9'.split(',')
+        domains = {var: [ch] if ch in '123456789' else list('123456789')
                    for var, ch in zip(flatten(self.rows), squares)}
         for _ in squares:
             raise ValueError("Not a Sudoku grid", grid)  # Too many squares
-        CSP.__init__(self, None, domains, self.neighbors, all_diff_binary)
+        CSP.__init__(self, None, domains, self.neighbors, lambda A, a, B, b: a != b)
 
-    def display(self, assignment):
+    def assignment_to_str(self) -> str:
+        def show_box(box):
+            return [''.join(map(show_cell, row)) for row in box]
+
+        def show_cell(cell):
+            cell = str(self.infer_assignment().get(cell, '.'))
+            return cell if len(cell) == 1 else '.'
+
+        def abut(lines1, lines2):
+            return list(
+                map(''.join, list(zip(lines1, lines2))))
+
+        return ''.join(
+            ''.join(reduce(
+                abut, map(show_box, brow))) for brow in self.bgrid)
+
+    def display(self) -> None:
         def show_box(box):
             return [' '.join(map(show_cell, row)) for row in box]
 
         def show_cell(cell):
-            cell = str(assignment.get(cell, '.'))
+            cell = str(self.infer_assignment().get(cell, '.'))
             return cell if len(cell) == 1 else '.'
 
         def abut(lines1, lines2):
