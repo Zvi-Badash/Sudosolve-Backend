@@ -39,7 +39,7 @@ class Sudoku(CSP):
             return [''.join(map(show_cell, row)) for row in box]
 
         def show_cell(cell):
-            cell = str(self.infer_assignment().get(cell, '.'))
+            cell = str(self.infer_assignment().get(cell, '..'))
             return cell if len(cell) == 1 else '.'
 
         def abut(lines1, lines2):
@@ -55,7 +55,7 @@ class Sudoku(CSP):
             return [' '.join(map(show_cell, row)) for row in box]
 
         def show_cell(cell):
-            cell = str(self.infer_assignment().get(cell, '.'))
+            cell = str(self.infer_assignment().get(cell, '..'))
             return cell if len(cell) == 1 else '.'
 
         def abut(lines1, lines2):

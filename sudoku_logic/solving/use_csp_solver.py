@@ -1,6 +1,5 @@
 from time import perf_counter
-from datetime import datetime
-from my_sudoku_solver.Sudoku import Sudoku
+from sudoku_logic.solving.Sudoku import Sudoku
 
 # print(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 # with open('all-sudokus.txt', 'r') as f:
