@@ -101,15 +101,17 @@ class CSP:
                                  key=lambda var: self.num_legal_values(var, assignment))
 
     # ------------------- SEARCH -------------------
+
     def backtracking_search(self) -> Assignment:
         """[Figure 6.5]"""
 
         def backtrack(assignment):
             if len(assignment) == len(self.variables):
                 return assignment
+
             var = self.mrv(assignment)
             for value in self.lcv(var, assignment):
-                if 0 == self.nconflicts(var, value, assignment):
+                if self.nconflicts(var, value, assignment) == 0:
                     self.assign(var, value, assignment)
                     removals = self.suppose(var, value)
                     if self.AC3(var=var, removals=removals):

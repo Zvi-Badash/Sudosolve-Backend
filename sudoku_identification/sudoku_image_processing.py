@@ -137,8 +137,8 @@ def analyze_image(image: Image, debug=False):
 
     # define the classifier
     classifier = digit_classification.Classifier.Classifier(
-        model_path='C:\\Zvi\\School\\sudo solve - all but code\\Python '
-                   'backend\\digit_classification\\models\\classifier.h5')
+        model_path='digit_classification\\models\\classifier.h5'
+    )
 
     # initialize our 9x9 Sudoku board
     board = np.zeros((9, 9), dtype="int")

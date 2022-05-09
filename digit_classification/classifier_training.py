@@ -2,7 +2,7 @@ from MnistCNNArchitecture import SudokuCNN
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.datasets import mnist
 from sklearn.preprocessing import LabelBinarizer
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, roc_auc_score, fbeta_score
 import argparse
 
 # construct the argument parser and parse the arguments

@@ -45,7 +45,6 @@ def get_sudoku(level: DifficultyLevel = DifficultyLevel.INSANE) -> str:
 
         # remove digit from said position
         solved = solved[:ind] + '0' + solved[ind + 1:]
-
     return solved
 
 

@@ -29,7 +29,6 @@ class SudokuSolverResource(Resource):
 
         try:
             req_data = request.get_json()
-            print(req_data)
             unsolved = req_data.get("unsolved")
         except LookupError:
             return Response('The request is invalid.\n', status=400)
@@ -43,8 +42,8 @@ class SudokuSolverResource(Resource):
         if not solved:
             return Response('Could not solve the Sudoku.\n', status=400)
 
-        puzzle.display()
-        print(jsonify({"solved": puzzle.assignment_to_str()}))
+        # puzzle.display()
+        # print(jsonify({"solved": puzzle.assignment_to_str()}))
         return jsonify({"solved": puzzle.assignment_to_str()})
 
 
@@ -60,7 +59,7 @@ class SudokuIdentifierResource(Resource):
 
         try:
             req_data = request.get_json()
-            encoded: str = req_data.get('image').get('data')
+            encoded: str = req_data.get('image')
         except LookupError:
             return Response('The request is invalid.\n', status=400)
 
@@ -95,6 +94,11 @@ class SudokuGeneratorResource(Resource):
         return jsonify({'generated': board})
 
 
+api.add_resource(SudokuSolverResource, '/solve')
+api.add_resource(SudokuIdentifierResource, '/identify')
+api.add_resource(SudokuGeneratorResource, '/generate')
+
+
 @app.route('/', methods=['GET'])
 def helpPage():
     return render_template('help.html')
@@ -104,10 +108,6 @@ def helpPage():
 def isConnected():
     return jsonify({'connected': True})
 
-
-api.add_resource(SudokuSolverResource, '/solve')
-api.add_resource(SudokuIdentifierResource, '/identify')
-api.add_resource(SudokuGeneratorResource, '/generate')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
