@@ -40,7 +40,6 @@ def get_sudoku(level: DifficultyLevel = DifficultyLevel.INSANE) -> str:
         ind = random.randint(0, len(solved) - 1)
         while ind in removed:
             ind = random.randint(0, len(solved) - 1)
-
         removed.add(ind)
 
         # remove digit from said position

@@ -22,7 +22,7 @@
 - Send a POST request to /solve with JSON containing the key
     'board' with the value being the actual board position.
     for example, use:
-    <code>>>> curl -X POST -d '{"board": "080000000000050900701002060020000080030004000408900600604007010300000000000200007"}' http://127.0.0.1:5000/solve -H "Content-Type: application/json" -H "Auth: AUTH_KEY"</code>
+    <code>>>> curl -X POST -d '{"unsolved": "080000000000050900701002060020000080030004000408900600604007010300000000000200007"}' http://127.0.0.1:5000/solve -H "Content-Type: application/json" -H "Auth: AUTH_KEY"</code>
     to request the solution to a given board.
 </pre>
 
