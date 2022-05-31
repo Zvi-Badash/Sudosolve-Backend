@@ -1,0 +1,9 @@
+Pillow~=8.4.0
+Flask~=2.0.2
+numpy~=1.19.5
+opencv-python~=4.5.4.60
+keras~=2.6.0
+tensorflow~=2.6.2
+scikit-learn~=0.24.2
+imutils~=0.5.4
+scikit-image~=0.17.2
