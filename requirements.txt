@@ -1,6 +1,6 @@
-Pillow~=8.4.0
+Pillow>=9.2.0
 Flask~=2.0.2
-numpy~=1.19.5
+numpy>=1.22
 opencv-python~=4.5.4.60
 keras~=2.6.0
 tensorflow~=2.11.1
